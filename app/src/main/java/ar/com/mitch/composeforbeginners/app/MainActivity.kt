@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -48,15 +49,31 @@ class MainActivity : AppCompatActivity() {
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text(
-                        text = "Happy Meal",
-                        style = TextStyle(
-                            fontSize = TextUnit(
-                                value = 26F,
-                                type = TextUnitType.Sp
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Happy Meal",
+                            style = TextStyle(
+                                fontSize = TextUnit(
+                                    value = 26F,
+                                    type = TextUnitType.Sp
+                                )
                             )
                         )
-                    )
+                        Text(
+                            text = "$5,99",
+                            style = TextStyle(
+                                color = Color.Blue,
+                                fontSize = TextUnit(
+                                    value = 18F,
+                                    type = TextUnitType.Sp
+                                )
+                            ),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
                     Spacer(modifier = Modifier.padding(top = 10.dp))
                     Text(
                         text = "800 calories",
@@ -68,16 +85,12 @@ class MainActivity : AppCompatActivity() {
                         )
                     )
                     Spacer(modifier = Modifier.padding(top = 10.dp))
-                    Text(
-                        text = "$5,99",
-                        style = TextStyle(
-                            color = Color.Blue,
-                            fontSize = TextUnit(
-                                value = 18F,
-                                type = TextUnitType.Sp
-                            )
-                        )
-                    )
+                    Button(
+                        onClick = { },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(text = "Order now")
+                    }
                 }
             }
 
