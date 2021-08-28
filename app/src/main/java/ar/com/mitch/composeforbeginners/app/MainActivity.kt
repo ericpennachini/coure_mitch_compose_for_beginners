@@ -29,72 +29,7 @@ class MainActivity : AppCompatActivity() {
     @ExperimentalUnitApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContent {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxHeight()
-                    .background(color = Color(0xFFF1F1F1))
-            ) {
-                Image(
-                    bitmap = ImageBitmap.imageResource(
-                        res = resources,
-                        id = R.drawable.happy_meal_small
-                    ),
-                    contentDescription = "A McDonnals hamburger",
-                    modifier = Modifier.height(300.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "Happy Meal",
-                            style = TextStyle(
-                                fontSize = TextUnit(
-                                    value = 26F,
-                                    type = TextUnitType.Sp
-                                )
-                            )
-                        )
-                        Text(
-                            text = "$5,99",
-                            style = TextStyle(
-                                color = Color.Blue,
-                                fontSize = TextUnit(
-                                    value = 18F,
-                                    type = TextUnitType.Sp
-                                )
-                            ),
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(top = 10.dp))
-                    Text(
-                        text = "800 calories",
-                        style = TextStyle(
-                            fontSize = TextUnit(
-                                value = 18F,
-                                type = TextUnitType.Sp
-                            )
-                        )
-                    )
-                    Spacer(modifier = Modifier.padding(top = 10.dp))
-                    Button(
-                        onClick = { },
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(text = "Order now")
-                    }
-                }
-            }
-
-        }
+        setContentView(R.layout.activity_main)
     }
 
 }
