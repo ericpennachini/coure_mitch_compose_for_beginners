@@ -63,4 +63,6 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:$composeVersion"
     implementation "androidx.compose.material:material-icons-extended:$composeVersion"
 
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 }
