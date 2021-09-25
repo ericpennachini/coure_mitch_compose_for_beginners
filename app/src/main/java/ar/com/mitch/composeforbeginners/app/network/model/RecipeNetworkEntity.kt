@@ -2,7 +2,7 @@ package ar.com.mitch.composeforbeginners.app.network.model
 
 import com.google.gson.annotations.SerializedName
 
-class RecipeNetworkEntity(
+data class RecipeNetworkEntity(
     @SerializedName("pk")
     val pk: Int? = null,
 
