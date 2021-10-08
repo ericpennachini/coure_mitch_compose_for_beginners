@@ -1,15 +1,15 @@
 package ar.com.mitch.composeforbeginners.app.domain.util
 
-interface EntityMapper<Entity, DomainModel> {
+interface DomainMapper<T, DomainModel> {
 
     /**
      * Maps from an network entity to a domain model
      */
-    fun mapFromEntity(entity: Entity): DomainModel
+    fun mapToDomainModel(model: T): DomainModel
 
     /**
      * Maps from a domain model to an entity
      */
-    fun mapToEntity(domainModel: DomainModel): Entity
+    fun mapFromDomainModel(domainModel: DomainModel): T
 
 }

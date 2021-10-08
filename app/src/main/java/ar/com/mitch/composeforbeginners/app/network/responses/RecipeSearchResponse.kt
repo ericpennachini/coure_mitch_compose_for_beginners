@@ -1,6 +1,6 @@
 package ar.com.mitch.composeforbeginners.app.network.responses
 
-import ar.com.mitch.composeforbeginners.app.network.model.RecipeNetworkEntity
+import ar.com.mitch.composeforbeginners.app.network.model.RecipeDto
 import com.google.gson.annotations.SerializedName
 
 data class RecipeSearchResponse(
@@ -8,5 +8,5 @@ data class RecipeSearchResponse(
     val count: Int,
 
     @SerializedName("results")
-    val results: List<RecipeNetworkEntity>
+    val results: List<RecipeDto>
 )
