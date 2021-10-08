@@ -8,5 +8,5 @@ data class RecipeSearchResponse(
     val count: Int,
 
     @SerializedName("results")
-    val results: List<RecipeDto>
+    val recipes: List<RecipeDto>
 )
