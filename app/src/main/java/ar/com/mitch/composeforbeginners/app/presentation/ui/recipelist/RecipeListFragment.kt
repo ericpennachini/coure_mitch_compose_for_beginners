@@ -37,6 +37,7 @@ class RecipeListFragment : Fragment() {
             setContent {
                 val recipes = viewModel.recipes.value
                 val query = viewModel.query.value
+                val selectedCategory = viewModel.selectedCategory.value
 
                 Column {
                     Surface(
@@ -47,11 +48,13 @@ class RecipeListFragment : Fragment() {
                        val keyboard = LocalSoftwareKeyboardController.current
                        SearchToolbar(
                            query = query,
-                           onQueryUpdated = { newValue ->
-                               viewModel.onQueryChange(newValue)
+                           selectedCategory = selectedCategory,
+                           onQueryUpdated = viewModel::onQueryChange,
+                           onSelectedCategoryChanged = {
+                               viewModel.onSelectedCategoryChanged(it)
                            },
                            onSearchPerformed = {
-                               viewModel.newSearch(it)
+                               viewModel.newSearch()
                                keyboard?.hide()
                            }
                        )

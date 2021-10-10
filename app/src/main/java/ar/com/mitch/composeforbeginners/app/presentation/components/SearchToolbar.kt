@@ -18,13 +18,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import ar.com.mitch.composeforbeginners.app.presentation.ui.recipelist.FoodCategory
 import ar.com.mitch.composeforbeginners.app.presentation.ui.recipelist.getAllFoodCategories
 
 @Composable
 fun SearchToolbar(
     query: String,
+    selectedCategory: FoodCategory?,
     onQueryUpdated: (newValue: String) -> Unit,
-    onSearchPerformed: (query: String) -> Unit
+    onSearchPerformed: () -> Unit,
+    onSelectedCategoryChanged: (String) -> Unit
 ) {
     Column {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -46,7 +49,7 @@ fun SearchToolbar(
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        onSearchPerformed(query)
+                        onSearchPerformed()
                     }
                 ),
                 textStyle = TextStyle(
@@ -57,15 +60,22 @@ fun SearchToolbar(
                 )
             )
         }
-        LazyRow {
+        LazyRow(
+            modifier = Modifier.padding(
+                start = 8.dp,
+                bottom = 8.dp
+            )
+        ) {
             itemsIndexed(
                 items = getAllFoodCategories()
             ) { _, cat ->
                 FoodCategoryChip(
                     category = cat.value,
+                    isSelected = selectedCategory == cat,
+                    onSelectedCategoryChanged = onSelectedCategoryChanged,
                     onExecuteSearch = {
-                        onQueryUpdated(it)
-                        onSearchPerformed(it)
+                        onQueryUpdated(cat.value)
+                        onSearchPerformed()
                     }
                 )
             }
