@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -69,4 +71,11 @@ dependencies {
 
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+
+    implementation "com.google.dagger:hilt-android:$daggerVersion"
+    kapt "com.google.dagger:hilt-compiler:$daggerVersion"
+
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$androidxHiltVersion"
+    kapt "androidx.hilt:hilt-compiler:$androidxHiltVersion"
+    annotationProcessor "androidx.hilt:hilt-compiler:$androidxHiltVersion"
 }
