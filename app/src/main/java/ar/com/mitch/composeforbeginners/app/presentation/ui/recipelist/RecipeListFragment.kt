@@ -34,27 +34,29 @@ class RecipeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
-           setContent {
-               val recipes = viewModel.recipes.value
-               val query = viewModel.query.value
+            setContent {
+                val recipes = viewModel.recipes.value
+                val query = viewModel.query.value
 
-               Column {
-                   Surface(
+                Column {
+                    Surface(
                        modifier = Modifier.fillMaxWidth(),
                        color = MaterialTheme.colors.background,
                        elevation = 8.dp
-                   ) {
+                    ) {
                        val keyboard = LocalSoftwareKeyboardController.current
                        SearchToolbar(
                            query = query,
-                           onQueryUpdated = { viewModel.onQueryChange(it) },
+                           onQueryUpdated = { newValue ->
+                               viewModel.onQueryChange(newValue)
+                           },
                            onSearchPerformed = {
-                               viewModel.newSearch(query)
+                               viewModel.newSearch(it)
                                keyboard?.hide()
                            }
                        )
-                   }
-                   LazyColumn {
+                    }
+                    LazyColumn {
                        itemsIndexed(
                            items = recipes
                        ) { _, recipe ->
@@ -69,10 +71,9 @@ class RecipeListFragment : Fragment() {
                                }
                            )
                        }
-                   }
-               }
+                    }
+                }
            }
         }
-
     }
 }
