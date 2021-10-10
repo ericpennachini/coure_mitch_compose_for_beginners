@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -39,21 +42,30 @@ class RecipeListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
            setContent {
                val recipes = viewModel.recipes.value
+               val query = viewModel.query.value
 
-               LazyColumn {
-                   itemsIndexed(
-                       items = recipes
-                   ) { index, recipe ->
-                       RecipeCard(
-                           recipe = recipe,
-                           onClick = {
-                               Toast.makeText(
-                                   requireContext(),
-                                   "Clicked: ${recipe.title}",
-                                   Toast.LENGTH_SHORT
-                               ).show()
-                           }
-                       )
+               Column {
+                   OutlinedTextField(
+                       value = query,
+                       onValueChange = { newValue ->
+                           viewModel.onQueryChange(newValue)
+                       }
+                   )
+                   LazyColumn {
+                       itemsIndexed(
+                           items = recipes
+                       ) { _, recipe ->
+                           RecipeCard(
+                               recipe = recipe,
+                               onClick = {
+                                   Toast.makeText(
+                                       requireContext(),
+                                       "Clicked: ${recipe.title}",
+                                       Toast.LENGTH_SHORT
+                                   ).show()
+                               }
+                           )
+                       }
                    }
                }
            }
