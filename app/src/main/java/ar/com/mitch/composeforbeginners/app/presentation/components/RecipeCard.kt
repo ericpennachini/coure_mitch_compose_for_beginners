@@ -9,11 +9,21 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ar.com.mitch.composeforbeginners.R
 import ar.com.mitch.composeforbeginners.app.domain.model.Recipe
+import ar.com.mitch.composeforbeginners.app.util.DEFAULT_RECIPE_IMAGE
+import ar.com.mitch.composeforbeginners.app.util.loadPicture
 
 @Composable
 fun RecipeCard(
@@ -29,15 +39,18 @@ fun RecipeCard(
         elevation = 8.dp
     ) {
         Column {
-            recipe.featuredImage?.let { _ ->
-                Image(
-                    painter = painterResource(id = R.drawable.empty_plate),
-                    contentDescription = "Empty plate",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(225.dp),
-                    contentScale = ContentScale.Crop
-                )
+            recipe.featuredImage?.let { url ->
+                val image = loadPicture(url = url, defaultImageResId = DEFAULT_RECIPE_IMAGE).value
+                image?.let { img ->
+                    Image(
+                        painter = BitmapPainter(img.asImageBitmap()),
+                        contentDescription = "Empty plate",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(225.dp),
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
             recipe.title?.let {
                 Row(
