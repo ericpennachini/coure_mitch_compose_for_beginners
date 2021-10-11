@@ -1,25 +1,28 @@
 package ar.com.mitch.composeforbeginners.app.presentation.ui.recipelist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import ar.com.mitch.composeforbeginners.app.util.TAG
+import ar.com.mitch.composeforbeginners.app.presentation.components.RecipeCard
+import ar.com.mitch.composeforbeginners.app.presentation.components.SearchToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalComposeUiApi
 @AndroidEntryPoint
 class RecipeListFragment : Fragment() {
 
@@ -31,29 +34,45 @@ class RecipeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
-           setContent {
-               val result = viewModel.recipes.value
+            setContent {
+                val recipes = viewModel.recipes.value
+                val query = viewModel.query.value
+                val selectedCategory = viewModel.selectedCategory.value
 
-               for (recipe in result) {
-                   Log.d(TAG, "onCreateView: ${recipe.title}")
-               }
-
-               Column(modifier = Modifier.padding(16.dp)) {
-                   Text(
-                       text = "Recipe List",
-                       style = TextStyle(fontSize = 21.sp)
-                   )
-                   Spacer(modifier = Modifier.padding(12.dp))
-                   Button(
-                       onClick = {
-                           viewModel.newSearch()
-                       }
-                   ) {
-                       Text(text = "PERFORM SEARCH")
-                   }
-               }
-           }
+                Column {
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colors.background,
+                        elevation = 8.dp
+                    ) {
+                        SearchToolbar(
+                            query = query,
+                            selectedCategory = selectedCategory,
+                            onQueryChanged = viewModel::onQueryChange,
+                            onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                            onExecuteSearch = viewModel::newSearch,
+                            scrollPosition = viewModel.categoryScrollPosition,
+                            onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition
+                        )
+                    }
+                    LazyColumn {
+                        itemsIndexed(
+                            items = recipes
+                        ) { _, recipe ->
+                            RecipeCard(
+                                recipe = recipe,
+                                onClick = {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Clicked: ${recipe.title}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
+                        }
+                    }
+                }
+            }
         }
-
     }
 }

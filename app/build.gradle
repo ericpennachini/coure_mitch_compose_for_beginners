@@ -78,4 +78,7 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$androidxHiltVersion"
     kapt "androidx.hilt:hilt-compiler:$androidxHiltVersion"
     annotationProcessor "androidx.hilt:hilt-compiler:$androidxHiltVersion"
+
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 }

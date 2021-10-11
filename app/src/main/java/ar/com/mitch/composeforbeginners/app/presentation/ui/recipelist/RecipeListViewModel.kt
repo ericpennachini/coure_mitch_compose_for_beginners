@@ -18,16 +18,37 @@ class RecipeListViewModel @Inject constructor(
 ): ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
+    val query: MutableState<String> = mutableStateOf("")
+    val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
+    var categoryScrollPosition: Int = 0
+
+    init {
+        newSearch()
+    }
 
     fun newSearch() {
         viewModelScope.launch {
             val result = repository.search(
                 token = token,
-                query = "",
+                query = query.value,
                 page = 1
             )
             recipes.value = result
         }
+    }
+
+    fun onQueryChange(query: String) {
+        this.query.value = query
+    }
+
+    fun onSelectedCategoryChanged(category: String) {
+        val newCategory = getFoodCategory(category)
+        selectedCategory.value = newCategory
+        onQueryChange(category)
+    }
+
+    fun onChangeCategoryScrollPosition(position: Int) {
+        categoryScrollPosition = position
     }
 
 }
