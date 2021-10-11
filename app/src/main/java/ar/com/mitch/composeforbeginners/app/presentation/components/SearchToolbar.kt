@@ -6,31 +6,39 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import ar.com.mitch.composeforbeginners.app.presentation.ui.recipelist.FoodCategory
 import ar.com.mitch.composeforbeginners.app.presentation.ui.recipelist.getAllFoodCategories
+import kotlinx.coroutines.launch
 
+@ExperimentalComposeUiApi
 @Composable
 fun SearchToolbar(
     query: String,
+    onQueryChanged: (String) -> Unit,
+    onExecuteSearch: () -> Unit,
+    scrollPosition: Int,
     selectedCategory: FoodCategory?,
-    onQueryUpdated: (newValue: String) -> Unit,
-    onSearchPerformed: () -> Unit,
-    onSelectedCategoryChanged: (String) -> Unit
+    onSelectedCategoryChanged: (String) -> Unit,
+    onChangeCategoryScrollPosition: (Int) -> Unit
 ) {
     Column {
         Row(modifier = Modifier.fillMaxWidth()) {
+            val keyboard = LocalSoftwareKeyboardController.current
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -42,14 +50,15 @@ fun SearchToolbar(
                 label = {
                     Text(text = "Search...")
                 },
-                onValueChange = onQueryUpdated,
+                onValueChange = onQueryChanged,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Search
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        onSearchPerformed()
+                        onExecuteSearch()
+                        keyboard?.hide()
                     }
                 ),
                 textStyle = TextStyle(
@@ -60,22 +69,31 @@ fun SearchToolbar(
                 )
             )
         }
+        val lazyListState = rememberLazyListState()
+        val coroutineScope = rememberCoroutineScope()
         LazyRow(
             modifier = Modifier.padding(
                 start = 8.dp,
                 bottom = 8.dp
-            )
+            ),
+            state = lazyListState
         ) {
+            coroutineScope.launch {
+                lazyListState.scrollToItem(scrollPosition)
+            }
             itemsIndexed(
                 items = getAllFoodCategories()
             ) { _, cat ->
                 FoodCategoryChip(
                     category = cat.value,
                     isSelected = selectedCategory == cat,
-                    onSelectedCategoryChanged = onSelectedCategoryChanged,
+                    onSelectedCategoryChanged = {
+                        onSelectedCategoryChanged(it)
+                        onChangeCategoryScrollPosition(lazyListState.firstVisibleItemIndex)
+                    },
                     onExecuteSearch = {
-                        onQueryUpdated(cat.value)
-                        onSearchPerformed()
+                        onQueryChanged(cat.value)
+                        onExecuteSearch()
                     }
                 )
             }

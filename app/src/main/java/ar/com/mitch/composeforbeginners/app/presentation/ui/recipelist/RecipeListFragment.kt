@@ -41,42 +41,38 @@ class RecipeListFragment : Fragment() {
 
                 Column {
                     Surface(
-                       modifier = Modifier.fillMaxWidth(),
-                       color = MaterialTheme.colors.background,
-                       elevation = 8.dp
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colors.background,
+                        elevation = 8.dp
                     ) {
-                       val keyboard = LocalSoftwareKeyboardController.current
-                       SearchToolbar(
-                           query = query,
-                           selectedCategory = selectedCategory,
-                           onQueryUpdated = viewModel::onQueryChange,
-                           onSelectedCategoryChanged = {
-                               viewModel.onSelectedCategoryChanged(it)
-                           },
-                           onSearchPerformed = {
-                               viewModel.newSearch()
-                               keyboard?.hide()
-                           }
-                       )
+                        SearchToolbar(
+                            query = query,
+                            selectedCategory = selectedCategory,
+                            onQueryChanged = viewModel::onQueryChange,
+                            onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                            onExecuteSearch = viewModel::newSearch,
+                            scrollPosition = viewModel.categoryScrollPosition,
+                            onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition
+                        )
                     }
                     LazyColumn {
-                       itemsIndexed(
-                           items = recipes
-                       ) { _, recipe ->
-                           RecipeCard(
-                               recipe = recipe,
-                               onClick = {
-                                   Toast.makeText(
-                                       requireContext(),
-                                       "Clicked: ${recipe.title}",
-                                       Toast.LENGTH_SHORT
-                                   ).show()
-                               }
-                           )
-                       }
+                        itemsIndexed(
+                            items = recipes
+                        ) { _, recipe ->
+                            RecipeCard(
+                                recipe = recipe,
+                                onClick = {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Clicked: ${recipe.title}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
+                        }
                     }
                 }
-           }
+            }
         }
     }
 }
