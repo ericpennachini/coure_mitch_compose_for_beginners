@@ -21,7 +21,7 @@ fun FoodCategoryChip(
     Surface(
         modifier = Modifier.padding(end = 8.dp),
         elevation = 8.dp,
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.large,
         color = if (isSelected) Color.LightGray else MaterialTheme.colors.primary
     ) {
         Row(
@@ -35,7 +35,7 @@ fun FoodCategoryChip(
         ) {
             Text(
                 text = category,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.button,
                 color = Color.White,
                 modifier = Modifier.padding(8.dp)
             )

@@ -75,7 +75,8 @@ fun SearchToolbar(
                     ),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         backgroundColor = MaterialTheme.colors.surface
-                    )
+                    ),
+                    shape = MaterialTheme.shapes.large
                 )
                 ConstraintLayout(
                     modifier = Modifier.align(Alignment.CenterVertically)
