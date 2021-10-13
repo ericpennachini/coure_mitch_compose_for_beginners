@@ -22,12 +22,18 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import ar.com.mitch.composeforbeginners.app.MainApplication
 import ar.com.mitch.composeforbeginners.app.presentation.components.*
+import ar.com.mitch.composeforbeginners.app.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @ExperimentalComposeUiApi
 @AndroidEntryPoint
 class RecipeListFragment : Fragment() {
+
+    @Inject
+    lateinit var application: MainApplication
 
     private val viewModel: RecipeListViewModel by viewModels()
 
@@ -38,17 +44,14 @@ class RecipeListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val isLoading = viewModel.loading.value
-                val recipes = viewModel.recipes.value
-                val query = viewModel.query.value
-                val selectedCategory = viewModel.selectedCategory.value
 
-                Column {
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colors.background,
-                        elevation = 8.dp
-                    ) {
+                AppTheme(darkTheme = application.isDark.value) {
+                    val isLoading = viewModel.loading.value
+                    val recipes = viewModel.recipes.value
+                    val query = viewModel.query.value
+                    val selectedCategory = viewModel.selectedCategory.value
+
+                    Column {
                         SearchToolbar(
                             query = query,
                             selectedCategory = selectedCategory,
@@ -56,32 +59,40 @@ class RecipeListFragment : Fragment() {
                             onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
                             onExecuteSearch = viewModel::newSearch,
                             scrollPosition = viewModel.categoryScrollPosition,
-                            onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition
+                            onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition,
+                            onToggleTheme = {
+                                application.toggleTheme()
+                            }
                         )
-                    }
 
-                    // all children fill the same space, it's not a stack
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        if (isLoading) {
-                            Skeleton(
-                                itemCount = 3,
-                                cardHeight = 250.dp
-                            )
-                        } else {
-                            LazyColumn {
-                                itemsIndexed(
-                                    items = recipes
-                                ) { _, recipe ->
-                                    RecipeCard(
-                                        recipe = recipe,
-                                        onClick = { }
-                                    )
+                        // all children fill the same space, it's not a stack
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background)
+                        ) {
+                            if (isLoading) {
+                                Skeleton(
+                                    itemCount = 3,
+                                    cardHeight = 250.dp
+                                )
+                            } else {
+                                LazyColumn {
+                                    itemsIndexed(
+                                        items = recipes
+                                    ) { _, recipe ->
+                                        RecipeCard(
+                                            recipe = recipe,
+                                            onClick = { }
+                                        )
+                                    }
                                 }
                             }
+                            CircularIndeterminateProgressBar(isDisplayed = isLoading)
                         }
-                        CircularIndeterminateProgressBar(isDisplayed = isLoading)
                     }
                 }
+
             }
         }
     }
