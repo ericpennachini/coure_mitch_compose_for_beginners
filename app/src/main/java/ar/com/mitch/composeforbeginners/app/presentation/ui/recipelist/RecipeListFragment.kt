@@ -9,8 +9,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Animation
+import androidx.compose.material.icons.twotone.CarRental
+import androidx.compose.material.icons.twotone.House
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -51,20 +54,22 @@ class RecipeListFragment : Fragment() {
                     val query = viewModel.query.value
                     val selectedCategory = viewModel.selectedCategory.value
 
-                    Column {
-                        SearchToolbar(
-                            query = query,
-                            selectedCategory = selectedCategory,
-                            onQueryChanged = viewModel::onQueryChange,
-                            onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
-                            onExecuteSearch = viewModel::newSearch,
-                            scrollPosition = viewModel.categoryScrollPosition,
-                            onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition,
-                            onToggleTheme = {
-                                application.toggleTheme()
-                            }
-                        )
-
+                    Scaffold(
+                        topBar = {
+                            SearchToolbar(
+                                query = query,
+                                selectedCategory = selectedCategory,
+                                onQueryChanged = viewModel::onQueryChange,
+                                onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                                onExecuteSearch = viewModel::newSearch,
+                                scrollPosition = viewModel.categoryScrollPosition,
+                                onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition,
+                                onToggleTheme = {
+                                    application.toggleTheme()
+                                }
+                            )
+                        }
+                    ) {
                         // all children fill the same space, it's not a stack
                         Box(
                             modifier = Modifier
