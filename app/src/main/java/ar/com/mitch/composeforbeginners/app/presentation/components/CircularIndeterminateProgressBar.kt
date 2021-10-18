@@ -33,11 +33,8 @@ fun CircularIndeterminateProgressBar(
             )
             Text(
                 text = "Loading recipes...",
-                style = TextStyle(
-                    color = MaterialTheme.colors.primary,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
-                ),
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primary,
                 modifier = Modifier.constrainAs(text) {
                     top.linkTo(progressBar.bottom)
                     start.linkTo(parent.start)
