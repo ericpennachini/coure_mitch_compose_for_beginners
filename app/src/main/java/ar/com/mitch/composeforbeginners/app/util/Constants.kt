@@ -1,3 +1,4 @@
 package ar.com.mitch.composeforbeginners.app.util
 
-val TAG = "AppDebug"
+const val TAG = "AppDebug"
+const val RECIPE_LIST_PAGE_SIZE = 30
