@@ -49,15 +49,18 @@ class RecipeListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+                val isLoading = viewModel.loading.value
+                val recipes = viewModel.recipes.value
+                val query = viewModel.query.value
+                val selectedCategory = viewModel.selectedCategory.value
+                val scaffoldState = rememberScaffoldState()
+                val currentPage = viewModel.currentPage.value
 
-                AppTheme(darkTheme = application.isDark.value) {
-                    val isLoading = viewModel.loading.value
-                    val recipes = viewModel.recipes.value
-                    val query = viewModel.query.value
-                    val selectedCategory = viewModel.selectedCategory.value
-                    val scaffoldState = rememberScaffoldState()
-                    val currentPage = viewModel.currentPage.value
-
+                AppTheme(
+                    darkTheme = application.isDark.value,
+                    showLoading = isLoading,
+                    scaffoldState = scaffoldState
+                ) {
                     Scaffold(
                         topBar = {
                             SearchToolbar(
@@ -84,8 +87,6 @@ class RecipeListFragment : Fragment() {
                             onChangeRecipeListScrollPosition = viewModel::onChangeRecipeListScrollPosition,
                             currentPage = currentPage,
                             onNextPage = viewModel::nextPage,
-                            snackBarController = snackBarController,
-                            scaffoldState = scaffoldState,
                             onItemClick = { recipe ->
                                 val bundle = Bundle().also { it.putInt("recipeId", recipe.id ?: 0) }
                                 findNavController().navigate(R.id.toRecipeFragment, bundle)
