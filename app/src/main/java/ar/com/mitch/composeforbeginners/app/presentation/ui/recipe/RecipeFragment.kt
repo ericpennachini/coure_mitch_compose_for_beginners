@@ -21,9 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import ar.com.mitch.composeforbeginners.app.MainApplication
-import ar.com.mitch.composeforbeginners.app.presentation.components.CircularIndeterminateProgressBar
-import ar.com.mitch.composeforbeginners.app.presentation.components.DefaultSnackBar
-import ar.com.mitch.composeforbeginners.app.presentation.components.RecipeView
+import ar.com.mitch.composeforbeginners.app.presentation.components.*
 import ar.com.mitch.composeforbeginners.app.presentation.theme.AppTheme
 import ar.com.mitch.composeforbeginners.app.presentation.ui.recipe.RecipeEvent.*
 import ar.com.mitch.composeforbeginners.app.util.SnackBarController
@@ -75,13 +73,12 @@ class RecipeFragment : Fragment() {
                             modifier = Modifier.fillMaxSize()
                         ) {
                             if (isLoading && recipe == null) {
-                                Text(text = "Loading...")
+                                Skeleton(cardHeight = IMAGE_HEIGHT.dp)
                             } else {
                                 recipe?.let {
                                     RecipeView(recipe = it)
                                 }
                             }
-                            CircularIndeterminateProgressBar(isDisplayed = isLoading)
                             DefaultSnackBar(
                                 snackBarHostState = scaffoldState.snackbarHostState,
                                 onDismiss = {
