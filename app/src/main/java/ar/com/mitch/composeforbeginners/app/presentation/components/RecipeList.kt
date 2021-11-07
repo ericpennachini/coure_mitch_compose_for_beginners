@@ -23,8 +23,6 @@ fun RecipeList(
     onChangeRecipeListScrollPosition: (Int) -> Unit,
     currentPage: Int,
     onNextPage: () -> Unit,
-    snackBarController: SnackBarController,
-    scaffoldState: ScaffoldState,
     onItemClick: (Recipe) -> Unit
 ) {
     Box(
@@ -55,13 +53,5 @@ fun RecipeList(
                 }
             }
         }
-        CircularIndeterminateProgressBar(isDisplayed = isLoading)
-        DefaultSnackBar(
-            snackBarHostState = scaffoldState.snackbarHostState,
-            onDismiss = {
-                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-            },
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
     }
 }
